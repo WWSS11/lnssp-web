@@ -1,0 +1,188 @@
+{
+  "dsl_version": "SSP-DSL-1.0",
+  "rule_id": "R-530-OLDER-UI-PENSION-FUND-COVERAGE",
+  "name": "大龄领取失业保险金人员养老保险费支持（资格初判）",
+  "module": "subsidy",
+  "status": "published",
+  "priority": 530,
+  "effective_from": "2025-01-01",
+  "effective_to": "2039-12-31",
+  "supersedes": [],
+  "notes": "政策执行期为2025-01-01至2039-12-31。本规则仅判断是否进入距离法定退休年龄不足1年的时间窗口。申请人应先以个人身份实际缴费，达到办理时点后申请，经办机构核定后将基金承担费用发至社会保障卡；不是自动代缴。",
+  "inputs": [
+    {
+      "key": "user.status.on_unemployment_benefit",
+      "type": "boolean",
+      "required": false
+    },
+    {
+      "key": "user.subsidy.months_to_legal_retire",
+      "type": "number",
+      "required": false
+    }
+  ],
+  "parameter_refs": [],
+  "decision_table": {
+    "hit_policy": "first",
+    "rows": [
+      {
+        "row_id": "row_1_missing_months",
+        "when": {
+          "==": [
+            {
+              "var": "user.subsidy.months_to_legal_retire"
+            },
+            null
+          ]
+        },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.subsidy.older_ui_pension_fund_eligible",
+              "value": null
+            },
+            {
+              "type": "set",
+              "path": "calc.needs_agent",
+              "value": true
+            },
+            {
+              "type": "emit_question",
+              "value": {
+                "question_id": "Q-MONTHS-TO-RETIRE",
+                "text": "缺少距退休月数，无法判断是否进入大龄领取失业保险金人员养老保险费支持窗口（距法定退休年龄不足1年）。",
+                "field": "user.subsidy.months_to_legal_retire"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_2_not_on_ui",
+        "when": { "==": [{ "var": "user.status.on_unemployment_benefit" }, false] },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.subsidy.older_ui_pension_fund_eligible",
+              "value": false
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_3_ui_status_unknown",
+        "when": { "==": [{ "var": "user.status.on_unemployment_benefit" }, null] },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.subsidy.older_ui_pension_fund_eligible", "value": null },
+            { "type": "set", "path": "calc.needs_agent", "value": true },
+            {
+              "type": "emit_question",
+              "value": {
+                "question_id": "Q-ON-UNEMPLOYMENT-BENEFIT",
+                "text": "请确认目前是否正在领取失业保险金；未确认前不能判断大龄领金人员养老保险费支持线索。",
+                "field": "user.status.on_unemployment_benefit"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_4_eligible",
+        "when": {
+          "and": [
+            {
+              "==": [
+                {
+                  "var": "user.status.on_unemployment_benefit"
+                },
+                true
+              ]
+            },
+            {
+              ">=": [
+                {
+                  "var": "user.subsidy.months_to_legal_retire"
+                },
+                0
+              ]
+            },
+            {
+              "<": [
+                {
+                  "var": "user.subsidy.months_to_legal_retire"
+                },
+                12
+              ]
+            }
+          ]
+        },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.subsidy.older_ui_pension_fund_eligible",
+              "value": true
+            },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-OLDER-UI-PENSION",
+                "text": "当前仅识别到政策时间窗口，不能直接认定可申请。本人须先以灵活就业人员等个人身份参加企业职工基本养老保险并实际缴费，再按经办机构要求办理；所需材料以经办机构一次性告知为准。基金只承担按当地灵活就业人员最低缴费标准计算的部分，超出部分由本人承担。失业金延长发放至法定退休年龄的资格和期限尚未在本引擎完整计算。"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "key": "calc.subsidy.older_ui_pension_fund_eligible",
+      "type": "boolean"
+    },
+    {
+      "key": "calc.warnings",
+      "type": "array"
+    },
+    {
+      "key": "calc.needs_agent",
+      "type": "boolean"
+    }
+  ],
+  "examples": [
+    {
+      "name": "领失业金且距退休10个月 -> eligible",
+      "input": {
+        "user": {
+          "status": {
+            "on_unemployment_benefit": true
+          },
+          "subsidy": {
+            "months_to_legal_retire": 10
+          }
+        }
+      },
+      "expected": {
+        "calc": {
+          "subsidy": {
+            "older_ui_pension_fund_eligible": true
+          }
+        }
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "source": "辽宁省人力资源和社会保障厅",
+      "document_no": "辽人社〔2025〕1号",
+      "url": "https://rst.ln.gov.cn/rst/zfxx/fdzdgknr/lzyj/rstgfxwj/lrs/2025020811105037146/index.shtml",
+      "effective_from": "2025-01-01",
+      "effective_to": "2039-12-31",
+      "reviewed_at": "2026-08-20",
+      "note": "关于大龄领取失业保险金人员参加企业职工基本养老保险有关事项的通知"
+    }
+  ]
+}

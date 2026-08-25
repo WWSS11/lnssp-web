@@ -1,0 +1,255 @@
+{
+  "policy_pack_id": "LIAONING_BASE",
+  "description": "辽宁社保基础参数包（仅收录可由国家或辽宁官方文件核验的省级口径）",
+  "as_of": "2026-08-20",
+  "policy_data_as_of": "2025-12-31",
+  "last_reviewed_at": "2026-08-20",
+  "review_due_at": "2026-12-31",
+  "applicable_province": "辽宁省",
+  "applicable_city": null,
+  "scope": "province",
+  "review_status": "approved",
+  "confidence": "high",
+  "params": [
+    {
+      "param_id": "P-LN-PENSION-CONTRIB-BASE-LOWER",
+      "type": "number",
+      "value": 4359,
+      "unit": "yuan/month",
+      "effective_from": "2025-01-01",
+      "effective_to": "2025-12-31",
+      "availability": "historical_only",
+      "source": "辽人社〔2025〕17号；https://liaoning.chinatax.gov.cn/art/2025/9/15/art_5869_7692.html",
+      "reviewed_at": "2026-08-20",
+      "note": "2025年全省企业职工基本养老保险、机关事业单位养老保险个人缴费基数下限；截至参数包日期未检索到2026年度新基数文件"
+    },
+    {
+      "param_id": "P-LN-PENSION-CONTRIB-BASE-UPPER",
+      "type": "number",
+      "value": 21792,
+      "unit": "yuan/month",
+      "effective_from": "2025-01-01",
+      "effective_to": "2025-12-31",
+      "availability": "historical_only",
+      "source": "辽人社〔2025〕17号；https://liaoning.chinatax.gov.cn/art/2025/9/15/art_5869_7692.html",
+      "reviewed_at": "2026-08-20",
+      "note": "2025年全省企业职工基本养老保险、机关事业单位养老保险个人缴费基数上限"
+    },
+    {
+      "param_id": "P-LN-PENSION-RATE-EMPLOYER",
+      "type": "number",
+      "value": 0.16,
+      "unit": "ratio",
+      "effective_from": "2020-07-01",
+      "source": "辽人社〔2020〕23号；https://liaoning.chinatax.gov.cn/art/2020/5/29/art_5821_45007.html",
+      "reviewed_at": "2026-08-20"
+    },
+    {
+      "param_id": "P-LN-PENSION-RATE-EMPLOYEE",
+      "type": "number",
+      "value": 0.08,
+      "unit": "ratio",
+      "effective_from": "2020-07-01",
+      "source": "辽人社〔2020〕23号；https://liaoning.chinatax.gov.cn/art/2020/5/29/art_5821_45007.html",
+      "reviewed_at": "2026-08-20"
+    },
+    {
+      "param_id": "P-LN-PENSION-RATE-FLEX",
+      "type": "number",
+      "value": 0.2,
+      "unit": "ratio",
+      "effective_from": "2020-07-01",
+      "source": "辽人社〔2020〕23号；https://liaoning.chinatax.gov.cn/art/2020/5/29/art_5821_45007.html",
+      "reviewed_at": "2026-08-20",
+      "note": "灵活就业人员参加企业职工基本养老保险缴费比例，其中8%计入个人账户"
+    },
+    {
+      "param_id": "P-LN-MEDICAL-LIFETIME-MALE-YEARS",
+      "type": "number",
+      "value": 30,
+      "unit": "years",
+      "effective_from": "2021-09-01",
+      "source": "辽宁省贯彻落实医疗保障待遇清单制度实施方案；https://ybj.ln.gov.cn/ybj/zwgk/zcwjyjd/2026012816213639438/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "累计缴费年限，包含视同缴费和实际缴费；还需满足待遇享受地实际缴费年限要求"
+    },
+    {
+      "param_id": "P-LN-MEDICAL-LIFETIME-FEMALE-YEARS",
+      "type": "number",
+      "value": 25,
+      "unit": "years",
+      "effective_from": "2021-09-01",
+      "source": "辽宁省贯彻落实医疗保障待遇清单制度实施方案；https://ybj.ln.gov.cn/ybj/zwgk/zcwjyjd/2026012816213639438/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "累计缴费年限，包含视同缴费和实际缴费；还需满足待遇享受地实际缴费年限要求"
+    },
+    {
+      "param_id": "P-LN-MEDICAL-LOCAL-ACTUAL-YEARS",
+      "type": "number",
+      "value": 10,
+      "unit": "years",
+      "effective_from": "2021-09-01",
+      "source": "辽宁省贯彻落实医疗保障待遇清单制度实施方案；https://ybj.ln.gov.cn/ybj/zwgk/zcwjyjd/2026012816213639438/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "待遇享受统筹地区实际缴费年限的一般口径；部分地区或特定人员存在过渡及转移接续安排，当前引擎不据此直接判定资格"
+    },
+    {
+      "param_id": "P-LN-UNEMPLOYMENT-MAX-MONTHS",
+      "type": "number",
+      "value": 24,
+      "unit": "months",
+      "effective_from": "2022-01-01",
+      "source": "辽宁省失业保险省级统筹政策；https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092011403688129/index.shtml",
+      "reviewed_at": "2026-08-20"
+    },
+    {
+      "param_id": "P-LN-UNEMPLOYMENT-BENEFIT-RATE-UNDER-10-YEARS",
+      "type": "number",
+      "value": 0.85,
+      "unit": "ratio",
+      "effective_from": "2022-01-01",
+      "source": "辽宁省失业保险省级统筹政策；https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092011403688129/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "累计缴费满1年不足10年，按待遇领取地最低工资标准的85%核定"
+    },
+    {
+      "param_id": "P-LN-UNEMPLOYMENT-BENEFIT-RATE-10-YEARS-OR-MORE",
+      "type": "number",
+      "value": 0.9,
+      "unit": "ratio",
+      "effective_from": "2022-01-01",
+      "source": "辽宁省失业保险省级统筹政策；https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092011403688129/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "累计缴费满10年及以上，按待遇领取地最低工资标准的90%核定"
+    },
+    {
+      "param_id": "P-LN-FLEX-SOCIAL-SUBSIDY-MAX-RATE",
+      "type": "number",
+      "value": 0.6666666667,
+      "unit": "ratio",
+      "effective_from": "2024-09-18",
+      "source": "辽财社规〔2024〕8号；https://czt.ln.gov.cn/czt/zfxxgk/zc/xzgfxwj/2025082914544599331/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "就业困难人员灵活就业社保补贴的省级上限原则，不是各市统一实际补贴比例"
+    },
+    {
+      "param_id": "P-LN-FLEX-SOCIAL-SUBSIDY-GENERAL-MAX-MONTHS",
+      "type": "number",
+      "value": 36,
+      "unit": "months",
+      "effective_from": "2024-09-18",
+      "source": "辽财社规〔2024〕8号；https://czt.ln.gov.cn/czt/zfxxgk/zc/xzgfxwj/2025082914544599331/index.shtml",
+      "reviewed_at": "2026-08-20"
+    },
+    {
+      "param_id": "P-LN-FLEX-SOCIAL-SUBSIDY-NEAR-RETIRE-MONTHS",
+      "type": "number",
+      "value": 60,
+      "unit": "months",
+      "effective_from": "2024-09-18",
+      "source": "辽财社规〔2024〕8号；https://czt.ln.gov.cn/czt/zfxxgk/zc/xzgfxwj/2025082914544599331/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "初次核定时距法定退休年龄不足5年的就业困难人员，补贴期限可延长至退休"
+    }
+  ],
+  "tables": [
+    {
+      "param_id": "T-LN-PENSION-FLEX-CONTRIB-TIERS-2025",
+      "type": "table",
+      "effective_from": "2025-01-01",
+      "effective_to": "2025-12-31",
+      "availability": "historical_only",
+      "key_fields": ["tier_percent"],
+      "value_fields": ["base_amount", "monthly_contribution"],
+      "rows": [
+        { "tier_percent": 60, "base_amount": 4359, "monthly_contribution": 871.8 },
+        { "tier_percent": 70, "base_amount": 5085, "monthly_contribution": 1017 },
+        { "tier_percent": 80, "base_amount": 5812, "monthly_contribution": 1162.4 },
+        { "tier_percent": 90, "base_amount": 6538, "monthly_contribution": 1307.6 },
+        { "tier_percent": 100, "base_amount": 7264, "monthly_contribution": 1452.8 },
+        { "tier_percent": 200, "base_amount": 14528, "monthly_contribution": 2905.6 },
+        { "tier_percent": 300, "base_amount": 21792, "monthly_contribution": 4358.4 }
+      ],
+      "source": "辽人社〔2025〕17号；https://liaoning.chinatax.gov.cn/art/2025/9/15/art_5869_7692.html",
+      "reviewed_at": "2026-08-20",
+      "note": "2025年个人参保人员养老保险七档缴费基数及月缴费额"
+    },
+    {
+      "param_id": "T-LN-MIN-WAGE-TIERS",
+      "type": "table",
+      "effective_from": "2025-12-01",
+      "key_fields": ["tier"],
+      "value_fields": ["monthly_amount", "hourly_amount"],
+      "rows": [
+        { "tier": 1, "monthly_amount": 2230, "hourly_amount": 22 },
+        { "tier": 2, "monthly_amount": 2080, "hourly_amount": 20 },
+        { "tier": 3, "monthly_amount": 1930, "hourly_amount": 19 }
+      ],
+      "source": "辽人社发〔2025〕7号；https://rst.ln.gov.cn/rst/zfxx/fdzdgknr/lzyj/rstgfxwj/lrsf/2025111415102221916/index.shtml",
+      "reviewed_at": "2026-08-20",
+      "note": "辽宁省三档标准；具体参保地适用档次以各市经省批准的文件为准，不能仅凭省份自动选值"
+    },
+    {
+      "param_id": "T-LN-UNEMPLOYMENT-DURATION-BY-YEARS",
+      "type": "table",
+      "effective_from": "2022-01-01",
+      "key_fields": ["insured_years"],
+      "value_fields": ["months"],
+      "rows": [
+        { "insured_years_min": 1, "insured_years_max": 2, "months": 3 },
+        { "insured_years_min": 2, "insured_years_max": 3, "months": 6 },
+        { "insured_years_min": 3, "insured_years_max": 4, "months": 9 },
+        { "insured_years_min": 4, "insured_years_max": 5, "months": 12 },
+        { "insured_years_min": 5, "insured_years_max": 6, "months": 13 },
+        { "insured_years_min": 6, "insured_years_max": 7, "months": 14 },
+        { "insured_years_min": 7, "insured_years_max": 8, "months": 15 },
+        { "insured_years_min": 8, "insured_years_max": 9, "months": 16 },
+        { "insured_years_min": 9, "insured_years_max": 10, "months": 18 },
+        { "insured_years_min": 10, "insured_years_max": 99, "months": 24 }
+      ],
+      "source": "辽宁省失业保险省级统筹政策；https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092011403688129/index.shtml",
+      "reviewed_at": "2026-08-20"
+    },
+    {
+      "param_id": "T-MIN-PENSION-YEARS-BY-RETIRE-YEAR",
+      "type": "timeline",
+      "effective_from": "2025-01-01",
+      "key_fields": ["retire_year"],
+      "value_fields": ["min_years"],
+      "rows": [
+        { "retire_year_max": 2029, "min_years": 15 },
+        { "retire_year_min": 2030, "retire_year_max": 2030, "min_years": 15.5 },
+        { "retire_year_min": 2031, "retire_year_max": 2031, "min_years": 16 },
+        { "retire_year_min": 2032, "retire_year_max": 2032, "min_years": 16.5 },
+        { "retire_year_min": 2033, "retire_year_max": 2033, "min_years": 17 },
+        { "retire_year_min": 2034, "retire_year_max": 2034, "min_years": 17.5 },
+        { "retire_year_min": 2035, "retire_year_max": 2035, "min_years": 18 },
+        { "retire_year_min": 2036, "retire_year_max": 2036, "min_years": 18.5 },
+        { "retire_year_min": 2037, "retire_year_max": 2037, "min_years": 19 },
+        { "retire_year_min": 2038, "retire_year_max": 2038, "min_years": 19.5 },
+        { "retire_year_min": 2039, "min_years": 20 }
+      ],
+      "source": "全国人大常委会决定（2024年9月13日通过）；https://www.npc.gov.cn/npc/c2/kgfb/202409/t20240913_439534.html",
+      "reviewed_at": "2026-08-20",
+      "note": "全国统一：2030年起每年提高6个月，2039年达到20年"
+    },
+    {
+      "param_id": "T-RETIREMENT-AGE-LOOKUP",
+      "type": "table",
+      "effective_from": "2025-01-01",
+      "key_fields": ["gender", "female_retire_type", "birth_year"],
+      "value_fields": ["legal_retire_age_years", "legal_retire_age_months", "original_retire_age_years"],
+      "rows": [
+        { "gender": "male", "female_retire_type": "na", "birth_year_max": 1964, "legal_retire_age_years": 60, "legal_retire_age_months": 0, "original_retire_age_years": 60 },
+        { "gender": "female", "female_retire_type": "worker50", "birth_year_max": 1974, "legal_retire_age_years": 50, "legal_retire_age_months": 0, "original_retire_age_years": 50 },
+        { "gender": "female", "female_retire_type": "cadre55", "birth_year_max": 1969, "legal_retire_age_years": 55, "legal_retire_age_months": 0, "original_retire_age_years": 55 },
+        { "gender": "male", "female_retire_type": "na", "birth_year_min": 1977, "legal_retire_age_years": 63, "legal_retire_age_months": 0, "original_retire_age_years": 60 },
+        { "gender": "female", "female_retire_type": "cadre55", "birth_year_min": 1982, "legal_retire_age_years": 58, "legal_retire_age_months": 0, "original_retire_age_years": 55 },
+        { "gender": "female", "female_retire_type": "worker50", "birth_year_min": 1985, "legal_retire_age_years": 55, "legal_retire_age_months": 0, "original_retire_age_years": 50 }
+      ],
+      "source": "全国人大常委会决定（2024年9月13日通过）；https://www.npc.gov.cn/npc/c2/kgfb/202409/t20240913_439534.html",
+      "reviewed_at": "2026-08-20",
+      "note": "过渡区间出生年月由引擎按国家公式逐月计算；本表仅覆盖改革前后边界"
+    }
+  ]
+}

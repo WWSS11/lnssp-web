@@ -1,0 +1,126 @@
+{
+  "dsl_version": "SSP-DSL-1.0",
+  "generated_at": "2026-02-25",
+  "rules": [
+    {
+      "rule_id": "R-010-PARSE-BIRTH-YEAR",
+      "name": "解析出生年份（支持“73年=1973”）",
+      "module": "normalization",
+      "priority": 10,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-011-BUILD-BIRTH-DATE",
+      "name": "组装出生日期（年/月/日 -> YYYY-MM-DD）",
+      "module": "normalization",
+      "priority": 11,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-012-NORMALIZE-GENDER",
+      "name": "标准化性别输入",
+      "module": "normalization",
+      "priority": 12,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-020-FEMALE-RETIRE-TYPE",
+      "name": "女性50/55口径确认（女工50 / 女干部55）",
+      "module": "retirement",
+      "priority": 20,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-110-LOOKUP-LEGAL-RETIRE-AGE",
+      "name": "查表计算法定退休年龄（参数表驱动）",
+      "module": "retirement",
+      "priority": 110,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-115-FLEXIBLE-RETIREMENT",
+      "name": "弹性退休年龄调整",
+      "module": "retirement",
+      "priority": 115,
+      "status": "published",
+      "effective_from": "2025-01-01"
+    },
+    {
+      "rule_id": "R-120-COMPUTE-RETIRE-DATE",
+      "name": "计算法定退休日期（出生日期 + 退休年龄）",
+      "module": "retirement",
+      "priority": 120,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-200-MIN-PENSION-YEARS",
+      "name": "按退休年份查最低养老缴费年限（参数时间线）",
+      "module": "pension",
+      "priority": 200,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-210-PENSION-GAP",
+      "name": "计算养老缴费年限缺口（以月计）",
+      "module": "pension",
+      "priority": 210,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-LN-220-MEDICAL-LIFETIME-GAP",
+      "name": "计算职工医保退休待遇累计缴费年限初步缺口（辽宁口径）",
+      "module": "medical_insurance",
+      "priority": 220,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-LN-410-UNEMPLOYMENT-DURATION",
+      "name": "失业保险金理论总期限初步核算（辽宁口径）",
+      "module": "unemployment",
+      "priority": 410,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-420-UI-MEDICAL-COVERAGE",
+      "name": "失业金期间医保由基金代缴提示（规划成本口径）",
+      "module": "unemployment",
+      "priority": 420,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-530-OLDER-UI-PENSION-FUND-COVERAGE",
+      "name": "大龄领取失业保险金人员养老保险费支持（资格初判）",
+      "module": "subsidy",
+      "priority": 530,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-700-PLAN-TEMPLATE",
+      "name": "规划方案模板选择（规则引擎可直接输出的主骨架）",
+      "module": "plan",
+      "priority": 700,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    },
+    {
+      "rule_id": "R-900-FINAL-GATE",
+      "name": "最终Gate：关键字段缺失/冲突 -> needs_agent",
+      "module": "gate",
+      "priority": 900,
+      "status": "published",
+      "effective_from": "2024-01-01"
+    }
+  ]
+}

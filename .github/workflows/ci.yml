@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# 同一分支/PR 的新提交会取消上一次仍在跑的 CI。
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: lint · typecheck · test · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Liaoning production residual scan
+        run: npm run check:liaoning
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # 运行时 env 都是惰性读取（请求时才读），构建用占位值即可，避免 prerender 触发缺失报错。
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          OPENAI_API_KEY: sk-ci-placeholder
+          OPENAI_MODEL: gpt-4o-mini
+          OPENAI_URL: https://api.openai.com/v1

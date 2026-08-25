@@ -1,0 +1,296 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "辽宁社保用户画像 Schema v1",
+  "type": "object",
+  "properties": {
+    "basic": {
+      "type": "object",
+      "properties": {
+        "birth_year_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "birth_year": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1940,
+          "maximum": 2010
+        },
+        "birth_month": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 12
+        },
+        "birth_day": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 31
+        },
+        "birth_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "readOnly": true,
+          "description": "由出生年月日标准化生成，不接受客户端或模型直接指定"
+        },
+        "gender": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "male",
+            "female",
+            null
+          ]
+        },
+        "female_retire_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "worker50",
+            "cadre55",
+            "unknown",
+            null
+          ],
+          "description": "仅女性使用的原法定退休年龄口径；男性不填写，由规则引擎自动进入男性退休分支"
+        },
+        "retirement_exception_type": {
+          "type": ["string", "null"],
+          "enum": ["none", "special_work", "disability", "other", "unknown", null],
+          "description": "仅记录用户明确提到的特殊工种、病残等例外情形；未提及特殊退休时应省略，不能填写 unknown"
+        },
+        "target_city": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 2,
+          "maxLength": 20,
+          "enum": [
+            "沈阳", "大连", "鞍山", "抚顺", "本溪", "丹东", "锦州",
+            "营口", "阜新", "辽阳", "盘锦", "铁岭", "朝阳", "葫芦岛", null
+          ],
+          "description": "兼容旧会话的单一城市字段；新输入应使用 locations 区分参保地、待遇地和户籍地"
+        },
+        "retire_preference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "earliest",
+            "standard",
+            "latest",
+            null
+          ]
+        },
+        "planned_retire_date": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "用户拟选择的退休时间；用于弹性退休最低缴费年限初算，不代表审批退休时间"
+        }
+      }
+    },
+    "locations": {
+      "type": "object",
+      "properties": {
+        "pension_insured_city": { "$ref": "#/definitions/liaoningCity" },
+        "medical_insured_city": { "$ref": "#/definitions/liaoningCity" },
+        "medical_benefit_city": { "$ref": "#/definitions/liaoningCity" },
+        "unemployment_benefit_city": { "$ref": "#/definitions/liaoningCity" },
+        "household_city": { "$ref": "#/definitions/liaoningCity" }
+      }
+    },
+    "social": {
+      "type": "object",
+      "properties": {
+        "pension_contrib_months": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 600
+        },
+        "medical_contrib_months": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 600
+        },
+        "unemployment_insurance_years": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 50
+        },
+        "deemed_contribution_status": {
+          "type": ["string", "null"],
+          "enum": ["none", "included", "unverified", null],
+          "description": "养老累计缴费月数对视同缴费年限的处理状态"
+        },
+        "base_lower_amount_per_month": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 1000000
+        },
+        "min_wage_amount_per_month": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 1000000
+        },
+        "paid_months_in_year": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "maxItems": 12
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "employment_status": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "employed",
+            "unemployed",
+            "flexible",
+            "retired",
+            "unknown",
+            null
+          ]
+        },
+        "on_unemployment_benefit": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "unemployment_benefit_months_used": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 600
+        },
+        "unemployment_benefit_months_remaining": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 600
+        }
+      }
+    },
+    "subsidy": {
+      "type": "object",
+      "properties": {
+        "has_employment_difficulty_cert": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "months_to_legal_retire": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "由法定退休日期和测算日期计算，不接受客户端或模型直接指定"
+        }
+      }
+    },
+    "mi": {
+      "type": "object",
+      "properties": {
+        "insurance_type": {
+          "type": ["string", "null"],
+          "enum": ["employee", "resident", "unknown", null]
+        },
+        "benefit_city_actual_contrib_months": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 600
+        },
+        "deemed_contribution_included": {
+          "type": ["boolean", "null"]
+        },
+        "prev_end_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "enroll_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "objective": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "min_cost",
+        "max_pension",
+        "keep_medical",
+        "balanced",
+        null
+      ]
+    }
+  },
+  "definitions": {
+    "liaoningCity": {
+      "type": ["string", "null"],
+      "enum": [
+        "沈阳", "大连", "鞍山", "抚顺", "本溪", "丹东", "锦州",
+        "营口", "阜新", "辽阳", "盘锦", "铁岭", "朝阳", "葫芦岛", null
+      ]
+    }
+  }
+}

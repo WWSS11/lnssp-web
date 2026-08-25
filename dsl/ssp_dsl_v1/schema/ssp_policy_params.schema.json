@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SSP Policy Params Schema v1",
+  "type": "object",
+  "required": [
+    "policy_pack_id",
+    "as_of",
+    "policy_data_as_of",
+    "last_reviewed_at",
+    "applicable_province",
+    "scope",
+    "review_status",
+    "confidence",
+    "params",
+    "tables"
+  ],
+  "properties": {
+    "policy_pack_id": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string"
+    },
+    "last_reviewed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "policy_data_as_of": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_due_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "applicable_province": { "const": "辽宁省" },
+    "applicable_city": { "type": ["string", "null"] },
+    "scope": { "type": "string", "enum": ["province", "city"] },
+    "review_status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected"]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "params": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/paramEntry"
+      }
+    },
+    "tables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/paramEntry"
+      }
+    }
+  },
+  "definitions": {
+    "paramEntry": {
+      "type": "object",
+      "required": ["param_id", "type", "effective_from", "source", "reviewed_at"],
+      "properties": {
+        "param_id": { "type": "string" },
+        "type": { "type": "string" },
+        "effective_from": { "type": "string", "format": "date" },
+        "effective_to": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "availability": {
+          "type": "string",
+          "enum": ["current", "historical_only"]
+        },
+        "source": { "type": "string", "pattern": "^.+；https://" },
+        "reviewed_at": { "type": "string", "format": "date" }
+        ,"confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        }
+      }
+    }
+  }
+}

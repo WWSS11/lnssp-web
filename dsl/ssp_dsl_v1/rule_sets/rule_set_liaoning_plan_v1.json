@@ -1,0 +1,27 @@
+{
+  "rule_set_id": "RS-LIAONING-PLAN-V1",
+  "description": "辽宁社保查询与规划规则集 v1（仅启用已核验的国家及辽宁省级口径）",
+  "status": "published",
+  "effective_from": "2025-01-01",
+  "rules": [
+    "R-010-PARSE-BIRTH-YEAR",
+    "R-011-BUILD-BIRTH-DATE",
+    "R-012-NORMALIZE-GENDER",
+    "R-020-FEMALE-RETIRE-TYPE",
+    "R-110-LOOKUP-LEGAL-RETIRE-AGE",
+    "R-115-FLEXIBLE-RETIREMENT",
+    "R-120-COMPUTE-RETIRE-DATE",
+    "R-200-MIN-PENSION-YEARS",
+    "R-210-PENSION-GAP",
+    "R-LN-220-MEDICAL-LIFETIME-GAP",
+    "R-LN-410-UNEMPLOYMENT-DURATION",
+    "R-420-UI-MEDICAL-COVERAGE",
+    "R-530-OLDER-UI-PENSION-FUND-COVERAGE",
+    "R-900-FINAL-GATE",
+    "R-700-PLAN-TEMPLATE"
+  ],
+  "conflict_resolution": {
+    "same_rule_id_multiple_versions": "latest_effective_from",
+    "policy_params": "latest_effective_from"
+  }
+}

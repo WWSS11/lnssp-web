@@ -1,0 +1,191 @@
+{
+  "dsl_version": "SSP-DSL-1.0",
+  "rule_id": "R-LN-410-UNEMPLOYMENT-DURATION",
+  "name": "辽宁失业保险金理论领取月数初步核算",
+  "module": "unemployment",
+  "status": "published",
+  "priority": 410,
+  "effective_from": "2022-01-01",
+  "effective_to": null,
+  "supersedes": [],
+  "notes": "仅按本次失业前可计入的累计缴费年限核算理论总期限，不代表剩余期限，也不扣减已领取月数；实际申领还需满足法定条件并由经办机构核定。",
+  "inputs": [
+    { "key": "user.status.employment_status", "type": "string", "required": true },
+    { "key": "user.social.unemployment_insurance_years", "type": "number", "required": false }
+  ],
+  "parameter_refs": [
+    { "param_id": "T-LN-UNEMPLOYMENT-DURATION-BY-YEARS", "purpose": "辽宁失业保险累计缴费年限与领取月数表" }
+  ],
+  "decision_table": {
+    "hit_policy": "first",
+    "rows": [
+      {
+        "row_id": "row_1_explicitly_not_unemployed",
+        "when": {
+          "in": [
+            { "var": "user.status.employment_status" },
+            ["employed", "flexible", "retired"]
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.unemployment.applicable", "value": false },
+            { "type": "set", "path": "calc.unemployment.duration_months", "value": null }
+          ]
+        }
+      },
+      {
+        "row_id": "row_2_unknown_status",
+        "when": {
+          "or": [
+            { "==": [{ "var": "user.status.employment_status" }, "unknown"] },
+            { "==": [{ "var": "user.status.employment_status" }, null] }
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.unemployment.applicable", "value": null },
+            { "type": "set", "path": "calc.unemployment.duration_months", "value": null },
+            { "type": "set", "path": "calc.needs_agent", "value": true },
+            {
+              "type": "emit_question",
+              "value": {
+                "question_id": "Q-LN-UI-EMPLOYMENT-STATUS",
+                "text": "请确认当前是否处于失业状态；只有明确非失业时才判定本项不适用。",
+                "field": "user.status.employment_status"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_3_missing_years",
+        "when": {
+          "and": [
+            { "==": [{ "var": "user.status.employment_status" }, "unemployed"] },
+            { "==": [{ "var": "user.social.unemployment_insurance_years" }, null] }
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.unemployment.applicable", "value": true },
+            { "type": "set", "path": "calc.unemployment.duration_months", "value": null },
+            { "type": "set", "path": "calc.needs_agent", "value": true },
+            {
+              "type": "emit_question",
+              "value": {
+                "question_id": "Q-LN-UI-YEARS",
+                "text": "请提供失业保险累计缴费年限，用于按辽宁省级口径初步核算可领取月数。",
+                "field": "user.social.unemployment_insurance_years"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_4_less_than_one_year",
+        "when": {
+          "and": [
+            { "==": [{ "var": "user.status.employment_status" }, "unemployed"] },
+            { "<": [{ "var": "user.social.unemployment_insurance_years" }, 1] }
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.unemployment.applicable", "value": true },
+            { "type": "set", "path": "calc.unemployment.duration_months", "value": 0 },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-LN-UI-LESS-THAN-ONE-YEAR",
+                "text": "累计缴纳失业保险费不足1年，不满足领取失业保险金的最低缴费年限条件。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_5_lookup_duration",
+        "when": {
+          "and": [
+            { "==": [{ "var": "user.status.employment_status" }, "unemployed"] },
+            { ">=": [{ "var": "user.social.unemployment_insurance_years" }, 1] }
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.unemployment.applicable", "value": true },
+            {
+              "type": "lookup",
+              "table_param_id": "T-LN-UNEMPLOYMENT-DURATION-BY-YEARS",
+              "key": { "insured_years": { "var": "user.social.unemployment_insurance_years" } },
+              "into": "calc.unemployment._duration_lookup",
+              "into_map": { "months": "calc.unemployment.duration_months" }
+            },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-LN-UI-PRELIMINARY",
+                "text": "该月数是按本次失业前可计入的累计缴费年限核算的理论总期限，未扣减已领取月数，不等于剩余期限；还需满足非因本人意愿中断就业等条件，并以失业保险经办机构核定为准。"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "outputs": [
+    { "key": "calc.unemployment.applicable", "type": "boolean" },
+    { "key": "calc.unemployment.duration_months", "type": "number" },
+    { "key": "calc.warnings", "type": "array" },
+    { "key": "calc.needs_agent", "type": "boolean" },
+    { "key": "calc.agent_questions", "type": "array" }
+  ],
+  "examples": [
+    {
+      "name": "辽宁失业保险累计5年初步可领13个月",
+      "input": {
+        "user": { "status": { "employment_status": "unemployed" }, "social": { "unemployment_insurance_years": 5 } },
+        "params": { "T-LN-UNEMPLOYMENT-DURATION-BY-YEARS": [{ "insured_years_min": 5, "insured_years_max": 6, "months": 13 }] }
+      },
+      "expected": { "calc": { "unemployment": { "duration_months": 13 } } }
+    },
+    {
+      "name": "辽宁失业保险累计10年初步可领24个月",
+      "input": {
+        "user": { "status": { "employment_status": "unemployed" }, "social": { "unemployment_insurance_years": 10 } },
+        "params": { "T-LN-UNEMPLOYMENT-DURATION-BY-YEARS": [{ "insured_years_min": 10, "insured_years_max": 99, "months": 24 }] }
+      },
+      "expected": { "calc": { "unemployment": { "duration_months": 24 } } }
+    },
+    {
+      "name": "非失业状态 -> 不适用",
+      "input": {
+        "user": { "status": { "employment_status": "employed" }, "social": { "unemployment_insurance_years": 0 } }
+      },
+      "expected": {
+        "calc": { "unemployment": { "applicable": false, "duration_months": null } }
+      }
+    },
+    {
+      "name": "就业状态未知 -> 待补充而非不适用",
+      "input": {
+        "user": { "status": { "employment_status": "unknown" }, "social": { "unemployment_insurance_years": 5 } }
+      },
+      "expected": {
+        "calc": { "needs_agent": true, "unemployment": { "applicable": null, "duration_months": null } }
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "source": "辽宁省人力资源和社会保障厅",
+      "document_no": "辽宁省失业保险省级统筹配套政策（2021年）",
+      "url": "https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092011403688129/index.shtml",
+      "effective_from": "2022-01-01",
+      "effective_to": null,
+      "reviewed_at": "2026-08-20",
+      "note": "全省统一失业保险待遇期限核定办法"
+    }
+  ]
+}

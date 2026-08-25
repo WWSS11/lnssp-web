@@ -1,0 +1,114 @@
+{
+  "dsl_version": "SSP-DSL-1.0",
+  "rule_id": "R-420-UI-MEDICAL-COVERAGE",
+  "name": "失业金期间医保由基金代缴提示（规划成本口径）",
+  "module": "unemployment",
+  "status": "published",
+  "priority": 420,
+  "effective_from": "2024-01-01",
+  "effective_to": null,
+  "supersedes": [],
+  "notes": "",
+  "inputs": [
+    {
+      "key": "user.status.on_unemployment_benefit",
+      "type": "boolean",
+      "required": false
+    }
+  ],
+  "parameter_refs": [],
+  "decision_table": {
+    "hit_policy": "first",
+    "rows": [
+      {
+        "row_id": "row_1_on_benefit",
+        "when": {
+          "==": [
+            {
+              "var": "user.status.on_unemployment_benefit"
+            },
+            true
+          ]
+        },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.mi.paid_by_unemployment_fund",
+              "value": true
+            },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-UI-MI-PAID",
+                "text": "领取失业保险金期间，按规定参加待遇领取地职工基本医疗保险，所需费用由失业保险基金支付，个人不缴费；具体参保衔接以经办结果为准。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_2_not_on_benefit",
+        "when": { "==": [{ "var": "user.status.on_unemployment_benefit" }, false] },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.mi.paid_by_unemployment_fund",
+              "value": false
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_3_benefit_status_unknown",
+        "when": { "==": [{ "var": "user.status.on_unemployment_benefit" }, null] },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.mi.paid_by_unemployment_fund", "value": null }
+          ]
+        }
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "key": "calc.mi.paid_by_unemployment_fund",
+      "type": "boolean"
+    },
+    {
+      "key": "calc.warnings",
+      "type": "array"
+    }
+  ],
+  "examples": [
+    {
+      "name": "正在领取失业金 -> 医保基金代缴提示",
+      "input": {
+        "user": {
+          "status": {
+            "on_unemployment_benefit": true
+          }
+        }
+      },
+      "expected": {
+        "calc": {
+          "mi": {
+            "paid_by_unemployment_fund": true
+          }
+        }
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "source": "辽宁省人力资源和社会保障厅",
+      "document_no": "辽人社〔2011〕221号",
+      "url": "https://rst.ln.gov.cn/rst/zfxx/zc/ywfl/shbx/2024092013500739037/index.shtml",
+      "effective_from": "2011-07-01",
+      "effective_to": null,
+      "reviewed_at": "2026-08-20",
+      "note": "领取失业保险金人员参加职工基本医疗保险，所需费用由失业保险基金支付，个人不缴费"
+    }
+  ]
+}

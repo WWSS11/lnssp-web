@@ -1,0 +1,141 @@
+{
+  "dsl_version": "SSP-DSL-1.0",
+  "rule_id": "R-LN-220-MEDICAL-LIFETIME-GAP",
+  "name": "辽宁退休职工医保累计缴费年限初步缺口",
+  "module": "medical_insurance",
+  "status": "published",
+  "priority": 220,
+  "effective_from": "2021-09-01",
+  "effective_to": null,
+  "supersedes": [],
+  "notes": "辽宁省级累计缴费年限口径为男30年、女25年。本规则只计算累计年限缺口；待遇享受地实际缴费年限、视同缴费认定及过渡政策需另行核验。",
+  "inputs": [
+    { "key": "user.basic.gender", "type": "string", "required": true },
+    { "key": "user.social.medical_contrib_months", "type": "number", "required": true }
+  ],
+  "parameter_refs": [
+    { "param_id": "P-LN-MEDICAL-LIFETIME-MALE-YEARS", "purpose": "男性累计缴费最低年限" },
+    { "param_id": "P-LN-MEDICAL-LIFETIME-FEMALE-YEARS", "purpose": "女性累计缴费最低年限" }
+  ],
+  "decision_table": {
+    "hit_policy": "first",
+    "rows": [
+      {
+        "row_id": "row_1_missing",
+        "when": {
+          "or": [
+            { "==": [{ "var": "user.social.medical_contrib_months" }, null] },
+            { "==": [{ "var": "user.basic.gender" }, null] }
+          ]
+        },
+        "then": {
+          "actions": [
+            { "type": "set", "path": "calc.needs_agent", "value": true },
+            {
+              "type": "emit_question",
+              "value": {
+                "question_id": "Q-LN-MI-MONTHS",
+                "text": "请提供职工医保累计缴费月数和性别，用于计算辽宁退休职工医保累计年限缺口。",
+                "field": "user.social.medical_contrib_months"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_2_male",
+        "when": {
+          "and": [
+            { "==": [{ "var": "user.basic.gender" }, "male"] },
+            { "!=": [{ "var": "user.social.medical_contrib_months" }, null] }
+          ]
+        },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.mi.lifetime_required_months",
+              "value": { "*": [{ "var": "params.P-LN-MEDICAL-LIFETIME-MALE-YEARS" }, 12] }
+            },
+            {
+              "type": "set",
+              "path": "calc.mi.lifetime_gap_months",
+              "value": { "max": [0, { "-": [{ "var": "calc.mi.lifetime_required_months" }, { "var": "user.social.medical_contrib_months" }] }] }
+            },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-LN-MI-LOCAL-YEARS",
+                "text": "该结果仅核算累计缴费年限；退休医保还需核验待遇享受地实际缴费年限、视同缴费认定及当地过渡政策。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "row_id": "row_3_female",
+        "when": {
+          "and": [
+            { "==": [{ "var": "user.basic.gender" }, "female"] },
+            { "!=": [{ "var": "user.social.medical_contrib_months" }, null] }
+          ]
+        },
+        "then": {
+          "actions": [
+            {
+              "type": "set",
+              "path": "calc.mi.lifetime_required_months",
+              "value": { "*": [{ "var": "params.P-LN-MEDICAL-LIFETIME-FEMALE-YEARS" }, 12] }
+            },
+            {
+              "type": "set",
+              "path": "calc.mi.lifetime_gap_months",
+              "value": { "max": [0, { "-": [{ "var": "calc.mi.lifetime_required_months" }, { "var": "user.social.medical_contrib_months" }] }] }
+            },
+            {
+              "type": "emit_warning",
+              "value": {
+                "warning_id": "W-LN-MI-LOCAL-YEARS",
+                "text": "该结果仅核算累计缴费年限；退休医保还需核验待遇享受地实际缴费年限、视同缴费认定及当地过渡政策。"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "outputs": [
+    { "key": "calc.mi.lifetime_gap_months", "type": "number" },
+    { "key": "calc.mi.lifetime_required_months", "type": "number" },
+    { "key": "calc.warnings", "type": "array" }
+  ],
+  "examples": [
+    {
+      "name": "辽宁男性医保累计已缴300月，需360月，缺60月",
+      "input": {
+        "user": { "basic": { "gender": "male" }, "social": { "medical_contrib_months": 300 } },
+        "params": { "P-LN-MEDICAL-LIFETIME-MALE-YEARS": 30 }
+      },
+      "expected": { "calc": { "mi": { "lifetime_gap_months": 60, "lifetime_required_months": 360 } } }
+    },
+    {
+      "name": "辽宁女性医保累计已缴240月，需300月，缺60月",
+      "input": {
+        "user": { "basic": { "gender": "female" }, "social": { "medical_contrib_months": 240 } },
+        "params": { "P-LN-MEDICAL-LIFETIME-FEMALE-YEARS": 25 }
+      },
+      "expected": { "calc": { "mi": { "lifetime_gap_months": 60, "lifetime_required_months": 300 } } }
+    }
+  ],
+  "evidence": [
+    {
+      "source": "辽宁省医疗保障局",
+      "document_no": "辽医保发〔2021〕9号",
+      "url": "https://ybj.ln.gov.cn/ybj/zwgk/zcwjyjd/2026012816213639438/index.shtml",
+      "effective_from": "2021-09-01",
+      "effective_to": null,
+      "reviewed_at": "2026-08-20",
+      "note": "累计缴费年限男30年、女25年，待遇地实际缴费一般满10年"
+    }
+  ]
+}
