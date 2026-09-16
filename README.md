@@ -138,24 +138,5 @@ docs/
 └── architecture.md  # 技术架构说明
 ```
 
----
 
-## 交流群
 
-欢迎加入交流群，交流社保规划、规则建模与项目使用反馈。
-
-<p align="center">
-  <img src="docs/qun.jpg" alt="交流群二维码" width="25%" />
-</p>
-
-## 友情链接
-
-- [Linux.do](https://linux.do/)
-
-## 随意打赏
-
-如果这个项目对你有帮助，欢迎随意打赏支持维护。
-
-<p align="center">
-  <img src="docs/dashang.jpg" alt="随意打赏二维码" width="25%" />
-</p>
